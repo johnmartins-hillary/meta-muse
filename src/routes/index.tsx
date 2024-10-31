@@ -4,6 +4,7 @@ import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import GalleryCard from '@/components/cards/GalleryCard'
 import Header from '@/components/Navs/Header';
+import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react';
 
 
 const items = [
@@ -31,6 +32,7 @@ const breakpointColumnsObj = {
 
 export const Route = createFileRoute('/')({
   component: () => (
+    <ThirdwebProvider activeChain={ChainId.Arbitrum}> {/* Arbitrum chain ID */}
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
     <Header />
      <div className="p-8">
@@ -44,6 +46,7 @@ export const Route = createFileRoute('/')({
             ))}
         </Masonry>
       </div>
-    </div>
+      </div>
+      </ThirdwebProvider>
 )
 })
