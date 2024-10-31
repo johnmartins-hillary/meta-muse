@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, Menu } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import Web3 from 'web3';
