@@ -9,25 +9,19 @@ import Button from '../Form/Button';
 
 const Header: React.FC = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const isMismatched = useNetworkMismatch();
   const [, switchNetwork] = useNetwork();
-  const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
-  useEffect(() => {
-    const connectWalletOnRender = async () => {
-      if (!address) {
-        await connectWithMetamask();
-      }
-      if (isMismatched && switchNetwork) {
-        alert('Switching to the Arbitrum network...');
-        switchNetwork(ChainId.Arbitrum);
-      }
-    };
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-    connectWalletOnRender();
-  }, [address, isMismatched, connectWithMetamask, switchNetwork]);
+  useEffect(() => {
+    if (address && isMismatched && switchNetwork) {
+      alert('Switching to the Arbitrum network...');
+      switchNetwork(ChainId.Arbitrum);
+    }
+  }, [address, isMismatched, switchNetwork]);
 
   const formattedAddress = address
     ? `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -38,8 +32,8 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    if(address) dispatch(setConnectedWallet(address))
-  },[address, currentUser])
+    if (address) dispatch(setConnectedWallet(address));
+  }, [address, currentUser, dispatch]);
 
   return (
     <header className="flex items-center justify-between p-4 bg-black text-white top-0">
@@ -49,7 +43,7 @@ const Header: React.FC = () => {
           Studio
         </Link>
       </div>
-      
+
       <div className="flex items-center space-x-2">
         <div className="flex bg-none border-[1px] border-[#D42C2CB2] items-center px-4 rounded-full">
           <input
@@ -64,27 +58,29 @@ const Header: React.FC = () => {
         {address ? (
           <span className="ml-4">{formattedAddress}</span>
         ) : (
-          <button onClick={() => connectWithMetamask()} className="ml-4 text-[#D42C2CB2] border border-[#D42C2CB2] px-4 py-2 rounded-full">
+          <button onClick={connectWithMetamask} className="ml-4 text-[#D42C2CB2] border border-[#D42C2CB2] px-4 py-2 rounded-full">
             Connect Wallet
           </button>
         )}
 
         {/* Dropdown Menu */}
-       {!currentUser?.validUser ? <div onClick={toggleDropdown} className="relative">
-          <Menu className="text-white cursor-pointer" />
-          {dropdownVisible && (
-            <div className="flex flex-col absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg p-4 z-50">
-              <Link href="/auth/sign-up" className="w-full py-2 text-center border border-[#D42C2CB2] rounded-full mb-2 text-[#D42C2CB2]">
-                Sign-up
-              </Link>
-              <Link href="/auth/sign-in" className="w-full py-2 text-center border border-[#D42C2CB2] rounded-full text-[#D42C2CB2]">
-                Log-in
-              </Link>
-            </div>
-          )}
-        </div> : 
-          <Button label='Logout' className='w-[100px] bg-[#D42C2CB2] text-white' onClick={() => { localStorage.clear();  window.location.reload()}}/>
-        }
+        {!currentUser?.validUser ? (
+          <div onClick={toggleDropdown} className="relative">
+            <Menu className="text-white cursor-pointer" />
+            {dropdownVisible && (
+              <div className="flex flex-col absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg p-4 z-50">
+                <Link href="/auth/sign-up" className="w-full py-2 text-center border border-[#D42C2CB2] rounded-full mb-2 text-[#D42C2CB2]">
+                  Sign-up
+                </Link>
+                <Link href="/auth/sign-in" className="w-full py-2 text-center border border-[#D42C2CB2] rounded-full text-[#D42C2CB2]">
+                  Log-in
+                </Link>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Button label='Logout' className='w-[100px] bg-[#D42C2CB2] text-white' onClick={() => { localStorage.clear(); window.location.reload() }}/>
+        )}
       </div>
     </header>
   );
