@@ -5,7 +5,18 @@ import {
 } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import io from 'socket.io-client';
-const socket = io('https://blockathon.onrender.com');
+const socket = io("https://blockathon.onrender.com", {
+    transports: ['websocket', 'polling'] // add polling as a fallback if needed
+});
+
+socket.on("connect", () => {
+    console.log("Connected to server");
+});
+
+socket.on("disconnect", () => {
+    console.log("Disconnected from server");
+});
+
 
 const DrawingCanvas = () => {
  const [lines, setLines] = useState([]);

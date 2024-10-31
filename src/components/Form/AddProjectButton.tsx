@@ -20,9 +20,9 @@ const AddProjectButton: React.FC<AddProjectButtonProps> = ({setOpenJoinModal,set
         setOpenJoinModal(true)
     };
 
-    const proceed = () => {
-        alert("Proceed clicked!");
-    };
+    // const proceed = () => {
+    //     alert("Proceed clicked!");
+    // };
 
 
     return (
