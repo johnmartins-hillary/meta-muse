@@ -58,7 +58,7 @@ const Header: React.FC = () => {
         {address ? (
           <span className="ml-4">{formattedAddress}</span>
         ) : (
-          <button onClick={connectWithMetamask} className="ml-4 text-[#D42C2CB2] border border-[#D42C2CB2] px-4 py-2 rounded-full">
+          <button onClick={() => connectWithMetamask()} className="ml-4 text-[#D42C2CB2] border border-[#D42C2CB2] px-4 py-2 rounded-full">
             Connect Wallet
           </button>
         )}
