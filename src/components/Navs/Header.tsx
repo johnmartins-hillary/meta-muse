@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Menu } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { useAddress, useMetamask, useNetworkMismatch, useNetwork } from '@thirdweb-dev/react';
-import { ChainId } from '@thirdweb-dev/sdk';
+import Web3 from 'web3';
 import { useDispatch } from 'react-redux';
 import { setConnectedWallet } from '@/redux/slice/user-slice';
 import Button from '../Form/Button';
@@ -10,30 +9,28 @@ import Button from '../Form/Button';
 const Header: React.FC = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dispatch = useDispatch();
-  const address = useAddress();
-  const connectWithMetamask = useMetamask();
-  const isMismatched = useNetworkMismatch();
-  const [, switchNetwork] = useNetwork();
+  const [address, setAddress] = useState<string | null>(null);
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+  
+  const web3 = new Web3(window.ethereum);
 
-  useEffect(() => {
-    if (address && isMismatched && switchNetwork) {
-      alert('Switching to the Arbitrum network...');
-      switchNetwork(ChainId.Arbitrum);
+  const connectWallet = async () => {
+    try {
+      const accounts = await web3.eth.requestAccounts();
+      if (accounts.length > 0) {
+        setAddress(accounts[0]);
+        dispatch(setConnectedWallet(accounts[0]));
+      }
+    } catch (error) {
+      console.error("Wallet connection failed:", error);
     }
-  }, [address, isMismatched, switchNetwork]);
+  };
 
-  const formattedAddress = address
-    ? `${address.slice(0, 6)}...${address.slice(-4)}`
-    : null;
+  const formattedAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : null;
 
   const toggleDropdown = () => {
     setDropdownVisible((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (address) dispatch(setConnectedWallet(address));
-  }, [address, currentUser, dispatch]);
 
   return (
     <header className="flex items-center justify-between p-4 bg-black text-white top-0">
@@ -58,7 +55,9 @@ const Header: React.FC = () => {
         {address ? (
           <span className="ml-4">{formattedAddress}</span>
         ) : (
-          <button onClick={() => connectWithMetamask()} className="ml-4 text-[#D42C2CB2] border border-[#D42C2CB2] px-4 py-2 rounded-full">
+          <button 
+            onClick={connectWallet} 
+            className="ml-4 text-[#D42C2CB2] border border-[#D42C2CB2] px-4 py-2 rounded-full">
             Connect Wallet
           </button>
         )}
@@ -79,7 +78,14 @@ const Header: React.FC = () => {
             )}
           </div>
         ) : (
-          <Button label='Logout' className='w-[100px] bg-[#D42C2CB2] text-white' onClick={() => { localStorage.clear(); window.location.reload() }}/>
+          <Button 
+            label='Logout' 
+            className='w-[100px] bg-[#D42C2CB2] text-white' 
+            onClick={() => { 
+              localStorage.clear();  
+              window.location.reload();
+            }} 
+          />
         )}
       </div>
     </header>

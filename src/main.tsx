@@ -33,8 +33,8 @@ if (!rootElement.innerHTML) {
 				{import.meta.env.DEV && (
 					<ReactQueryDevtools initialIsOpen={false} />
 				)}
+				<ToastContainer />
 			</QueryClientProvider>
-			<ToastContainer />
 		</Provider>,
 	);
 }

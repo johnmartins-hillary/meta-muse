@@ -3,6 +3,7 @@ import SignUpForm from '@/components/Form/SignUp'
 import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react'
 import { useEffect } from 'react'
 
+
 export const Route = createFileRoute('/auth/sign-up')({
   component: () => {
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
