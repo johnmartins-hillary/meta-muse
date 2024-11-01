@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, Menu } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import Web3 from 'web3';
@@ -11,8 +11,19 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const [address, setAddress] = useState<string | null>(null);
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-  
   const web3 = new Web3(window.ethereum);
+
+  // Check wallet connection status on mount
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      const accounts = await web3.eth.getAccounts();
+      if (accounts.length > 0) {
+        setAddress(accounts[0]);
+        dispatch(setConnectedWallet(accounts[0]));
+      }
+    };
+    checkWalletConnection();
+  }, [dispatch, web3]);
 
   const connectWallet = async () => {
     try {
@@ -42,7 +53,7 @@ const Header: React.FC = () => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <div className="flex bg-none border-[1px] border-[#D42C2CB2] items-center px-4 rounded-full">
+        <div className="flex bg-none border-[1px] border-white items-center px-4 rounded-full">
           <input
             type="text"
             placeholder="Search"

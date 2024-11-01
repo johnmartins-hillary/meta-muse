@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as OngoingProjectsImport } from './routes/ongoing-projects'
 import { Route as GetStartedImport } from './routes/get-started'
 import { Route as DrawingCanvasImport } from './routes/drawing-canvas'
+import { Route as AuctionPageImport } from './routes/auction-page'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthSignUpImport } from './routes/auth/sign-up'
 import { Route as AuthSignInImport } from './routes/auth/sign-in'
@@ -35,6 +36,12 @@ const GetStartedRoute = GetStartedImport.update({
 const DrawingCanvasRoute = DrawingCanvasImport.update({
   id: '/drawing-canvas',
   path: '/drawing-canvas',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuctionPageRoute = AuctionPageImport.update({
+  id: '/auction-page',
+  path: '/auction-page',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -65,6 +72,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auction-page': {
+      id: '/auction-page'
+      path: '/auction-page'
+      fullPath: '/auction-page'
+      preLoaderRoute: typeof AuctionPageImport
       parentRoute: typeof rootRoute
     }
     '/drawing-canvas': {
@@ -109,6 +123,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auction-page': typeof AuctionPageRoute
   '/drawing-canvas': typeof DrawingCanvasRoute
   '/get-started': typeof GetStartedRoute
   '/ongoing-projects': typeof OngoingProjectsRoute
@@ -118,6 +133,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auction-page': typeof AuctionPageRoute
   '/drawing-canvas': typeof DrawingCanvasRoute
   '/get-started': typeof GetStartedRoute
   '/ongoing-projects': typeof OngoingProjectsRoute
@@ -128,6 +144,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auction-page': typeof AuctionPageRoute
   '/drawing-canvas': typeof DrawingCanvasRoute
   '/get-started': typeof GetStartedRoute
   '/ongoing-projects': typeof OngoingProjectsRoute
@@ -139,6 +156,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auction-page'
     | '/drawing-canvas'
     | '/get-started'
     | '/ongoing-projects'
@@ -147,6 +165,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auction-page'
     | '/drawing-canvas'
     | '/get-started'
     | '/ongoing-projects'
@@ -155,6 +174,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auction-page'
     | '/drawing-canvas'
     | '/get-started'
     | '/ongoing-projects'
@@ -165,6 +185,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuctionPageRoute: typeof AuctionPageRoute
   DrawingCanvasRoute: typeof DrawingCanvasRoute
   GetStartedRoute: typeof GetStartedRoute
   OngoingProjectsRoute: typeof OngoingProjectsRoute
@@ -174,6 +195,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuctionPageRoute: AuctionPageRoute,
   DrawingCanvasRoute: DrawingCanvasRoute,
   GetStartedRoute: GetStartedRoute,
   OngoingProjectsRoute: OngoingProjectsRoute,
@@ -194,6 +216,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auction-page",
         "/drawing-canvas",
         "/get-started",
         "/ongoing-projects",
@@ -203,6 +226,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/auction-page": {
+      "filePath": "auction-page.tsx"
     },
     "/drawing-canvas": {
       "filePath": "drawing-canvas.jsx"

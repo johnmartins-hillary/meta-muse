@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 interface GalleryCardProps {
   image: string;
@@ -31,9 +32,9 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ image, title, creator, price,
         </div>
 
         {/* Button */}
-        <button className="flex items-center justify-center mt-3 px-3 py-1.5 bg-[#9E090F] text-white rounded-ss-[35px] rounded-ee-[35px] text-sm absolute bottom-2 right-2 h-[77px] font-bold text-[16px]">
+        <Link href="/auction-page" className="flex items-center justify-center mt-3 px-3 py-1.5 bg-[#9E090F] text-white rounded-ss-[35px] rounded-ee-[35px] text-sm absolute bottom-2 right-2 h-[77px] font-bold text-[16px]">
           Start Bid <ArrowRight className="ml-1 w-4 h-4" />
-        </button>
+        </Link>
       </div>
     </div>
   );

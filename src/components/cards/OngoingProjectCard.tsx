@@ -10,7 +10,7 @@ type CardProps = {
 
 const Card: React.FC<CardProps> = ({ title, description, progress, update, activities }) => {
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg flex flex-col h-[363px] w-full p-8 bg-[#101010] gap-2 ">
+    <div className="rounded-lg overflow-hidden shadow-lg flex flex-col h-[363px] w-full p-8 bg-gray-500 gap-2 ">
       {/* Title Section */}
     <h3 className="text-md font-bold text-white text-center w-full">Project Title: {title}</h3>
       

@@ -4,18 +4,19 @@ import {
   Brush, Eraser, Square, Circle as CircleIcon, Type, RefreshCcw, Trash2, ArrowLeftCircle, Upload, Crop, RotateCcw, FlipHorizontal, FlipVertical
 } from 'lucide-react';
 import Cropper from 'react-easy-crop';
-import io from 'socket.io-client';
-const socket = io("https://blockathon.onrender.com", {
-    transports: ['websocket', 'polling'] // add polling as a fallback if needed
+import { io } from 'socket.io-client';
+import Button from './Form/Button';
+import { toast } from 'react-toastify';
+
+const ENDPOINT = "http://localhost:3000/"
+const socket = io(ENDPOINT, {
+  transports: ["websocket", "polling"] // Fallback to polling if WebSocket fails
 });
 
-socket.on("connect", () => {
-    console.log("Connected to server");
+socket.on('connection', () => {
+  console.log("Connected to the server with ID:", socket.id);
 });
 
-socket.on("disconnect", () => {
-    console.log("Disconnected from server");
-});
 
 
 const DrawingCanvas = () => {
@@ -33,6 +34,7 @@ const DrawingCanvas = () => {
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const stageRef = useRef(null);
     const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
+   
 
     useEffect(() => {
       !currentUser?.validUser && window.location.replace("/auth/sign-in")
@@ -363,6 +365,14 @@ useEffect(() => {
             />
           </div>
 
+            <Button 
+            label='Mint NFT' 
+            className='w-[100px] bg-[#D42C2CB2] text-white fixed bottom-16 right-2' 
+              onClick={() => { 
+              toast.success("NFT Minted Successfully")
+              window.location.replace("/");
+            }} 
+          />
           </div>
         </div>
 
@@ -375,6 +385,9 @@ useEffect(() => {
             onCropComplete={handleCropComplete}
           />
         )}
+
+        {/* mint button */}
+         
       </div>
     );
 }
