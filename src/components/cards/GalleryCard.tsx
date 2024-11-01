@@ -1,6 +1,8 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { useDispatch } from 'react-redux';
+import { setNFTToBid } from '@/redux/slice/canvas-slice';
 
 interface GalleryCardProps {
   image: string;
@@ -11,6 +13,8 @@ interface GalleryCardProps {
 }
 
 const GalleryCard: React.FC<GalleryCardProps> = ({ image, title, creator, price, timeLeft }) => {
+const dispatch = useDispatch()
+
   return (
     <div className="relative rounded-xl overflow-hidden shadow-lg backdrop-blur-md bg-white/10 mb-4">
       {/* Image */}
@@ -32,7 +36,9 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ image, title, creator, price,
         </div>
 
         {/* Button */}
-        <Link href="/auction-page" className="flex items-center justify-center mt-3 px-3 py-1.5 bg-[#9E090F] text-white rounded-ss-[35px] rounded-ee-[35px] text-sm absolute bottom-2 right-2 h-[77px] font-bold text-[16px]">
+        <Link href="/auction-page" className="flex items-center justify-center mt-3 px-3 py-1.5 bg-[#9E090F] text-white rounded-ss-[35px] rounded-ee-[35px] text-sm absolute bottom-2 right-2 h-[77px] font-bold text-[16px]" onClick={() => {dispatch(setNFTToBid({
+          image, title, creator, price, timeLeft
+        }))}}>
           Start Bid <ArrowRight className="ml-1 w-4 h-4" />
         </Link>
       </div>

@@ -7,20 +7,17 @@ import Cropper from 'react-easy-crop';
 import { io } from 'socket.io-client';
 import Button from './Form/Button';
 import { toast } from 'react-toastify';
+import { mintNFT } from '../contract/functionCalls';
+import { useSelector } from 'react-redux';
 
-const ENDPOINT = "http://localhost:3000/"
+const ENDPOINT = "https://blockathon.onrender.com"
 const socket = io(ENDPOINT, {
   transports: ["websocket", "polling"] // Fallback to polling if WebSocket fails
 });
 
-socket.on('connection', () => {
-  console.log("Connected to the server with ID:", socket.id);
-});
-
-
 
 const DrawingCanvas = () => {
- const [lines, setLines] = useState([]);
+    const [lines, setLines] = useState([]);
     const [shapes, setShapes] = useState([]);
     const [texts, setTexts] = useState([]);
     const [images, setImages] = useState([]);
@@ -33,7 +30,8 @@ const DrawingCanvas = () => {
     const [croppingImage, setCroppingImage] = useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const stageRef = useRef(null);
-    const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
+  const {connectWallet} = useSelector((state) => state.user)
    
 
     useEffect(() => {
@@ -370,8 +368,9 @@ useEffect(() => {
             label='Mint NFT' 
             className='w-[100px] bg-[#D42C2CB2] text-white fixed bottom-16 right-2' 
               onClick={() => { 
-              toast.success("NFT Minted Successfully")
-              window.location.replace("/");
+                mintNFT("0x7Cc7216b13283A0D07413D4C720971FEFBe42240", "QmExampleIPFSCID", connectWallet);
+              // toast.success("NFT Minted Successfully")
+              // window.location.replace("/");
             }} 
           />
           </div>
