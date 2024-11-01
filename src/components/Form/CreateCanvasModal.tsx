@@ -6,6 +6,7 @@ import TextArea from './TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCanvasFormDetails } from '@/redux/slice/canvas-slice'
 import { generateRandomAlphanumericCode } from '@/helpers'
+import {  useRouter } from '@tanstack/react-router'
 
 interface CreateCanvsModalProp{
     handleCloseModal: any
@@ -13,6 +14,7 @@ interface CreateCanvsModalProp{
 const CreateCanvasModal: React.FC<CreateCanvsModalProp> = ({ handleCloseModal }) => {
     const { canvasCode, nftName, nftDescription } = useSelector((state: any) => state.canvas)
     const dispatch = useDispatch()
+    const router = useRouter()
     
        const handleInputChange = (e: any) => {
         const {name, value} = e.target
@@ -21,7 +23,7 @@ const CreateCanvasModal: React.FC<CreateCanvsModalProp> = ({ handleCloseModal })
 
      const handleSubmit = (e: any) => {
          e.preventDefault()
-         window.location.replace("/drawing-canvas")
+         router.navigate({ to: "/drawing-canvas" })
         // authenticateUser({firstName, lastName, email: emailAddress, password, walletAddress: connectWallet},"sign-up")
     }
 

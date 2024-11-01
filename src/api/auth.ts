@@ -11,11 +11,11 @@ export async function authenticateUser(data: any, type: "login" | "sign-up") {
 		if (type === "login") {
 			localStorage.setItem("user", JSON.stringify(data))
 			toast.success("Logged In")
-			window.location.replace("/")
+			window.location.href = "/"
 		}
 		if (type === "sign-up") {
 			toast.success("Account created successfully")
-			window.location.replace("/auth/sign-in")
+			window.location.href = "/auth/sign-in"
 		} 
 		store.dispatch(setAuthenticating(false))
 	}).catch((err) => {
@@ -27,8 +27,8 @@ export async function authenticateUser(data: any, type: "login" | "sign-up") {
 export async function canvas(data: any, type: "createCanvas" | "joinCanvas") {
 	store.dispatch(setAuthenticating(true))
 	const url = `/${type}`;
-	await axios.post(url, data).then((res) => {
-		const { data } = res
+	await axios.post(url, data).then(() => {
+		// const { data } = res
 		if (type === "createCanvas") {
 			toast.success("canvas created")
 		}
