@@ -2,7 +2,6 @@ import Header from '@/components/Navs/Header';
 import AuctionCard from '@/components/cards/AuctionCard';
 import { createFileRoute } from '@tanstack/react-router'
 import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react'
-import { toast } from 'react-toastify';
 
 export const Route = createFileRoute('/auction-page')({
   component: () => {
