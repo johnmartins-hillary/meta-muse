@@ -6,6 +6,7 @@ import ProjectGrid from '@/components/cards/ProjectGrid';
 import { createFileRoute } from '@tanstack/react-router'
 import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const Route = createFileRoute('/ongoing-projects')({
   component: () => {
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/ongoing-projects')({
 
     useEffect(() => {
       !currentUser?.validUser && window.location.replace("/auth/sign-in")
+      !currentUser?.validUser && toast.error("Login first to access this page")
     },[currentUser])
 
     

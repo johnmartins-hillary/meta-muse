@@ -38,6 +38,7 @@ const DrawingCanvas = () => {
 
     useEffect(() => {
       !currentUser?.validUser && window.location.replace("/auth/sign-in")
+      !currentUser?.validUser && toast.error("Login first to access this page")
     },[currentUser])
 
 const handleMouseDown = () => {
