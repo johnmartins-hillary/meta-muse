@@ -46,19 +46,19 @@ const handleMouseDown = () => {
   if (selectedTool === 'brush') {
     const newLine = { points: [pos.x, pos.y], color: brushColor, width: brushSize };
     setLines([...lines, newLine]);
-    socket.emit('draw', { tool: 'brush', line: newLine });
+    // socket.emit('draw', { tool: 'brush', line: newLine });
   } else if (selectedTool === 'rectangle') {
     const newShape = { type: 'rectangle', x: pos.x, y: pos.y, color: brushColor, width: 100, height: 100 };
     setShapes([...shapes, newShape]);
-    socket.emit('draw', { tool: 'rectangle', shape: newShape });
+    // socket.emit('draw', { tool: 'rectangle', shape: newShape });
   } else if (selectedTool === 'circle') {
     const newCircle = { type: 'circle', x: pos.x, y: pos.y, color: brushColor, radius: 50 };
     setShapes([...shapes, newCircle]);
-    socket.emit('draw', { tool: 'circle', shape: newCircle });
+    // socket.emit('draw', { tool: 'circle', shape: newCircle });
   } else if (selectedTool === 'text' && text) {
     const newText = { text, x: pos.x, y: pos.y, color: brushColor };
     setTexts([...texts, newText]);
-    socket.emit('draw', { tool: 'text', text: newText });
+    // socket.emit('draw', { tool: 'text', text: newText });
     setText('');
   }
 };
@@ -89,7 +89,14 @@ const handleMouseDown = () => {
 
     const handleMouseUp = () => {
       setIsDrawing(false);
-    };
+       // Export the canvas as Base64 after drawing
+      const base64Image = getCanvasAsBase64();
+      socket.emit('draw', base64Image, (responseData) => {
+        // Handle the response data immediately
+        console.log('Received response:', responseData);
+        // You can process or display the data as needed here
+    });
+  };
 
     const handleImageUpload = (e) => {
       const files = Array.from(e.target.files);
@@ -177,6 +184,19 @@ const rotateImage = () => {
       }
     };
 
+  const getCanvasAsBase64 = () => {
+    if (!stageRef.current) return;
+
+    // Export the content as a Base64 string
+    const base64Image = stageRef.current.toDataURL({
+      mimeType: 'image/png',
+      quality: 1,
+      pixelRatio: 2, // Adjust this for higher resolution if needed
+    });
+
+    return base64Image;
+  };
+
 
 useEffect(() => {
   // Listen for incoming 'draw' events and update the canvas
@@ -251,80 +271,79 @@ useEffect(() => {
 
 
         {/* Canvas Area */}
-        <div className="flex-1 flex justify-center items-center bg-white">
-          <Stage
-            width={800}
-            height={600}
-            onMouseDown={handleMouseDown}
-            onMousemove={handleMouseMove}
-            onMouseup={handleMouseUp}
-            ref={stageRef}
-            className="border border-gray-300 shadow-lg"
-          >
-            <Layer>
-              {lines.map((line, i) => (
-                <Line
+         <div className="flex-1 flex justify-center items-center bg-white">
+      <Stage
+        width={800}
+        height={600}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        ref={stageRef}
+        className="border border-gray-300 shadow-lg"
+      >
+        <Layer>
+          {lines.map((line, i) => (
+            <Line
+              key={i}
+              points={line.points}
+              stroke={selectedTool === 'eraser' ? '#ffffff' : line.color}
+              strokeWidth={line.width}
+              tension={0.5}
+              lineCap="round"
+              lineJoin="round"
+              globalCompositeOperation={selectedTool === 'eraser' ? 'destination-out' : 'source-over'}
+            />
+          ))}
+          {shapes.map((shape, i) => {
+            if (shape.type === 'rectangle') {
+              return (
+                <Rect
                   key={i}
-                  points={line.points}
-                  stroke={selectedTool === 'eraser' ? '#ffffff' : line.color}
-                  strokeWidth={line.width}
-                  tension={0.5}
-                  lineCap="round"
-                  lineJoin="round"
-                  globalCompositeOperation={selectedTool === 'eraser' ? 'destination-out' : 'source-over'}
+                  x={shape.x}
+                  y={shape.y}
+                  width={shape.width}
+                  height={shape.height}
+                  fill={shape.color}
                 />
-              ))}
-              {shapes.map((shape, i) => {
-                if (shape.type === 'rectangle') {
-                  return (
-                    <Rect
-                      key={i}
-                      x={shape.x}
-                      y={shape.y}
-                      width={shape.width}
-                      height={shape.height}
-                      fill={shape.color}
-                    />
-                  );
-                } else if (shape.type === 'circle') {
-                  return (
-                    <Circle
-                      key={i}
-                      x={shape.x}
-                      y={shape.y}
-                      radius={shape.radius}
-                      fill={shape.color}
-                    />
-                  );
-                }
-                return null;
-              })}
-              {texts.map((textItem, i) => (
-                <KonvaText
+              );
+            } else if (shape.type === 'circle') {
+              return (
+                <Circle
                   key={i}
-                  x={textItem.x}
-                  y={textItem.y}
-                  text={textItem.text}
-                  fontSize={24}
-                  fill={textItem.color}
+                  x={shape.x}
+                  y={shape.y}
+                  radius={shape.radius}
+                  fill={shape.color}
                 />
-              ))}
-              {images.map((imageItem, i) => (
-                <KonvaImage
-                  key={i}
-                  image={
-                  imageItem.img}
-                  x={imageItem.x}
-                  y={imageItem.y}
-                  width={imageItem.width}
-                  height={imageItem.height}
-                  draggable
-                  onClick={() => setSelectedImageIndex(i)}
-                />
-              ))}
-            </Layer>
-          </Stage>
-        </div>
+              );
+            }
+            return null;
+          })}
+          {texts.map((textItem, i) => (
+            <KonvaText
+              key={i}
+              x={textItem.x}
+              y={textItem.y}
+              text={textItem.text}
+              fontSize={24}
+              fill={textItem.color}
+            />
+          ))}
+          {images.map((imageItem, i) => (
+            <KonvaImage
+              key={i}
+              image={imageItem.img}
+              x={imageItem.x}
+              y={imageItem.y}
+              width={imageItem.width}
+              height={imageItem.height}
+              draggable
+              onClick={() => setSelectedImageIndex(i)}
+            />
+          ))}
+        </Layer>
+      </Stage>
+    </div>
 
         {/* Right Sidebar for Actions */}
         <div className="w-1/6 bg-gray-900 p-4 space-y-4">

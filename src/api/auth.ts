@@ -23,3 +23,21 @@ export async function authenticateUser(data: any, type: "login" | "sign-up") {
 		toast.error(err?.message)
 	})
 }
+
+export async function canvas(data: any, type: "createCanvas" | "joinCanvas") {
+	store.dispatch(setAuthenticating(true))
+	const url = `/${type}`;
+	await axios.post(url, data).then((res) => {
+		const { data } = res
+		if (type === "createCanvas") {
+			toast.success("canvas created")
+		}
+		if (type === "joinCanvas") {
+			toast.success("You have joined a canvas")
+		} 
+		store.dispatch(setAuthenticating(false))
+	}).catch((err) => {
+		store.dispatch(setAuthenticating(false))
+		toast.error(err?.message)
+	})
+}
