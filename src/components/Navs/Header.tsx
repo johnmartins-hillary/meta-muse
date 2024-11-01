@@ -98,14 +98,14 @@ const Header: React.FC = () => {
             <span>{formattedAddress}</span>
             <button 
               onClick={disconnectWallet} 
-              className="text-white border border-[#D42C2CB2] px-4 py-2 rounded-full">
+              className="text-white border border-white px-4 py-2 rounded-full">
               Disconnect Wallet
             </button>
           </div>
         ) : (
           <button 
             onClick={connectWallet} 
-            className="ml-4 text-white border border-[#D42C2CB2] px-4 py-2 rounded-full">
+            className="ml-4 text-white border border-white px-4 py-2 rounded-full">
             Connect Wallet
           </button>
         )}
