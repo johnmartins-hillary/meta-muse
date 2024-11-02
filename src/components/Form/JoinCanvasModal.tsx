@@ -4,6 +4,7 @@ import FormInput from './FormInput'
 import Button from './Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCanvasFormDetails } from '@/redux/slice/canvas-slice'
+import { useRouter } from '@tanstack/react-router'
 
 interface JoinCanvasModalProp{
     handleCloseModal: any
@@ -12,6 +13,7 @@ interface JoinCanvasModalProp{
 const JoinCanvasModal: React.FC<JoinCanvasModalProp> = ({ handleCloseModal }) => {
        const { canvasCode } = useSelector((state: any) => state.canvas)
     const dispatch = useDispatch()
+    const router = useRouter()
     
        const handleInputChange = (e: any) => {
         const {name, value} = e.target
@@ -20,7 +22,7 @@ const JoinCanvasModal: React.FC<JoinCanvasModalProp> = ({ handleCloseModal }) =>
 
         const handleSubmit = (e: any) => {
          e.preventDefault()
-         window.location.replace("/drawing-canvas")
+            router.navigate({ to: "/drawing-canvas" })
         // authenticateUser({firstName, lastName, email: emailAddress, password, walletAddress: connectWallet},"sign-up")
     }
     

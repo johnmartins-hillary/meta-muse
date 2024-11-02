@@ -3,7 +3,7 @@ import CreateCanvasModal from '@/components/Form/CreateCanvasModal';
 import JoinCanvasModal from '@/components/Form/JoinCanvasModal';
 import Header from '@/components/Navs/Header';
 import ProjectGrid from '@/components/cards/ProjectGrid';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -13,11 +13,14 @@ export const Route = createFileRoute('/ongoing-projects')({
     const [openCreateModal, setOpenCreateModal] = useState(false)
     const [openJoinModal, setOpenJoinModal] = useState(false)
      const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
+  const router = useRouter();
 
-    useEffect(() => {
-      !currentUser?.validUser && window.location.replace("/auth/sign-in")
-      !currentUser?.validUser && toast.error("Login first to access this page")
-    },[currentUser])
+  useEffect(() => {
+    if (!currentUser?.validUser) {
+      router.navigate({ to: '/auth/sign-in' }); // Navigate to sign-in page
+      toast.error("Login first to access this page");      // Show error message
+    }
+  }, [currentUser, router]);
 
     
     const handleCloseCreateModal = (e:any) => {

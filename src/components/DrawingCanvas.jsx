@@ -9,6 +9,7 @@ import Button from './Form/Button';
 import { toast } from 'react-toastify';
 import { mintNFT } from '../contract/functionCalls';
 import { useSelector } from 'react-redux';
+import { useRouter } from '@tanstack/react-router';
 
 const ENDPOINT = "https://blockathon.onrender.com"
 const socket = io(ENDPOINT, {
@@ -30,12 +31,13 @@ const DrawingCanvas = () => {
     const [croppingImage, setCroppingImage] = useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const stageRef = useRef(null);
-  const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
-  const {connectWallet} = useSelector((state) => state.user)
+    const currentUser = JSON.parse(localStorage.getItem("user") || "{}")
+    const { connectWallet } = useSelector((state) => state.user)
+    const router = useRouter()
    
 
     useEffect(() => {
-      !currentUser?.validUser && window.location.replace("/auth/sign-in")
+      !currentUser?.validUser && router.navigate({ to: "/auth/sign-in" })
       !currentUser?.validUser && toast.error("Login first to access this page")
     },[currentUser])
 

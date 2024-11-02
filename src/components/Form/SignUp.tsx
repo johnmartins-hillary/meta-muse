@@ -6,11 +6,13 @@ import Header from '../Navs/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAuthFormDetails } from '@/redux/slice/auth-slice'
 import { authenticateUser } from '@/api/auth'
+import { useRouter } from '@tanstack/react-router'
 
 const SignUpForm: React.FC = () => {
     const { connectWallet } = useSelector((state: any) => state.user)
     const {firstName, lastName, emailAddress, password, authenticating} = useSelector((state: any) => state.auth)
     const dispatch = useDispatch()
+    const router = useRouter()
     
     const handleInputChange = (e: any) => {
         const {name, value} = e.target
@@ -19,7 +21,7 @@ const SignUpForm: React.FC = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
-        authenticateUser({firstName, lastName, email: emailAddress, password, walletAddress: connectWallet},"sign-up")
+        authenticateUser({firstName, lastName, email: emailAddress, password, walletAddress: connectWallet},"sign-up", router)
     }
     
     return (

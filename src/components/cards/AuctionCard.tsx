@@ -2,18 +2,20 @@ import { User, Clock, Users } from 'lucide-react';
 import { useCountdown } from '@/hooks/useCoutdown';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useRouter } from '@tanstack/react-router';
 
 
 
 const AuctionCard = () => {
   const { hours, minutes, seconds } = useCountdown(new Date().setHours(new Date().getHours() + 10)); // Countdown example
   const { nftToBid } = useSelector((state: any) => state.canvas)
+  const router = useRouter()
   
     const handleBuy = () => {
       // Define the purchase logic here
       // buyNFT("QmExampleIPFSCID", nftToBid?.price)
       toast.success("Your bid has been placed successfully")
-      window.location.replace("/");
+      router.navigate({ to: "/" });
     };
 
   
