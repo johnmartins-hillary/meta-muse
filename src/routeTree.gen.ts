@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as OngoingProjectsImport } from './routes/ongoing-projects'
 import { Route as GetStartedImport } from './routes/get-started'
 import { Route as DrawingCanvasImport } from './routes/drawing-canvas'
+import { Route as ClientViewImport } from './routes/client-view'
 import { Route as AuctionPageImport } from './routes/auction-page'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthSignUpImport } from './routes/auth/sign-up'
@@ -36,6 +37,12 @@ const GetStartedRoute = GetStartedImport.update({
 const DrawingCanvasRoute = DrawingCanvasImport.update({
   id: '/drawing-canvas',
   path: '/drawing-canvas',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ClientViewRoute = ClientViewImport.update({
+  id: '/client-view',
+  path: '/client-view',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,6 +88,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuctionPageImport
       parentRoute: typeof rootRoute
     }
+    '/client-view': {
+      id: '/client-view'
+      path: '/client-view'
+      fullPath: '/client-view'
+      preLoaderRoute: typeof ClientViewImport
+      parentRoute: typeof rootRoute
+    }
     '/drawing-canvas': {
       id: '/drawing-canvas'
       path: '/drawing-canvas'
@@ -124,6 +138,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auction-page': typeof AuctionPageRoute
+  '/client-view': typeof ClientViewRoute
   '/drawing-canvas': typeof DrawingCanvasRoute
   '/get-started': typeof GetStartedRoute
   '/ongoing-projects': typeof OngoingProjectsRoute
@@ -134,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auction-page': typeof AuctionPageRoute
+  '/client-view': typeof ClientViewRoute
   '/drawing-canvas': typeof DrawingCanvasRoute
   '/get-started': typeof GetStartedRoute
   '/ongoing-projects': typeof OngoingProjectsRoute
@@ -145,6 +161,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auction-page': typeof AuctionPageRoute
+  '/client-view': typeof ClientViewRoute
   '/drawing-canvas': typeof DrawingCanvasRoute
   '/get-started': typeof GetStartedRoute
   '/ongoing-projects': typeof OngoingProjectsRoute
@@ -157,6 +174,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auction-page'
+    | '/client-view'
     | '/drawing-canvas'
     | '/get-started'
     | '/ongoing-projects'
@@ -166,6 +184,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auction-page'
+    | '/client-view'
     | '/drawing-canvas'
     | '/get-started'
     | '/ongoing-projects'
@@ -175,6 +194,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auction-page'
+    | '/client-view'
     | '/drawing-canvas'
     | '/get-started'
     | '/ongoing-projects'
@@ -186,6 +206,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuctionPageRoute: typeof AuctionPageRoute
+  ClientViewRoute: typeof ClientViewRoute
   DrawingCanvasRoute: typeof DrawingCanvasRoute
   GetStartedRoute: typeof GetStartedRoute
   OngoingProjectsRoute: typeof OngoingProjectsRoute
@@ -196,6 +217,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuctionPageRoute: AuctionPageRoute,
+  ClientViewRoute: ClientViewRoute,
   DrawingCanvasRoute: DrawingCanvasRoute,
   GetStartedRoute: GetStartedRoute,
   OngoingProjectsRoute: OngoingProjectsRoute,
@@ -217,6 +239,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auction-page",
+        "/client-view",
         "/drawing-canvas",
         "/get-started",
         "/ongoing-projects",
@@ -229,6 +252,9 @@ export const routeTree = rootRoute
     },
     "/auction-page": {
       "filePath": "auction-page.tsx"
+    },
+    "/client-view": {
+      "filePath": "client-view.tsx"
     },
     "/drawing-canvas": {
       "filePath": "drawing-canvas.jsx"
